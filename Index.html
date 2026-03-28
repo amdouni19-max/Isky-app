@@ -3,252 +3,312 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ISKY OS</title>
-
-<link rel="manifest" href="manifest.json">
+<title>ISKY</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-
 body{
+margin:0;
 font-family:-apple-system;
-background:linear-gradient(180deg,#0a0a0a,#000);
-color:white;
+background:#f2f2f7;
+color:#111;
 }
 
+/* HEADER */
 .header{
-text-align:center;
-padding:20px;
+padding:25px;
 font-size:28px;
-font-weight:600;
+font-weight:700;
 }
 
-.wrapper{
-display:flex;
-width:500%;
-height:100vh;
-transition:0.4s;
-}
-
-.page{
-width:100vw;
+/* GRID */
+.grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
 padding:15px;
-overflow-y:auto;
 }
 
+/* CARD */
 .card{
-background:rgba(255,255,255,0.05);
-backdrop-filter:blur(20px);
-border-radius:20px;
-padding:18px;
-margin-bottom:15px;
+background:white;
+border-radius:22px;
+padding:20px;
+box-shadow:0 10px 30px rgba(0,0,0,0.08);
+transition:0.2s;
 }
 
-h2{margin-bottom:10px;}
-h3{margin-top:10px;color:#00c6ff;}
+.card:active{
+transform:scale(0.96);
+}
 
-button{
-background:linear-gradient(135deg,#007aff,#00c6ff);
-border:none;
-padding:12px;
-border-radius:14px;
-color:white;
+/* TITLES */
+.title{font-size:18px;font-weight:600;}
+.sub{color:#777;font-size:13px;margin-top:5px;}
+
+/* PAGE */
+.page{
+position:fixed;
+top:0;
+left:0;
 width:100%;
-margin-top:10px;
+height:100%;
+background:#f2f2f7;
+transform:translateX(100%);
+transition:0.35s;
+overflow:auto;
+padding:20px;
 }
 
+.active{transform:translateX(0);}
+
+/* BACK */
+.back{
+color:#007aff;
+margin-bottom:20px;
+}
+
+/* BUTTON */
+.btn{
+background:#007aff;
+color:white;
+padding:15px;
+border-radius:14px;
+text-align:center;
+margin-top:15px;
+font-weight:500;
+}
+
+/* CHECKBOX */
+.task{
+margin-bottom:12px;
+font-size:16px;
+}
+
+/* PROGRESS */
 .progress{
-height:8px;
-background:#222;
+height:10px;
+background:#ddd;
 border-radius:10px;
 margin-top:10px;
 }
 
 .bar{
 height:100%;
-background:linear-gradient(90deg,#00ff88,#00c6ff);
+background:#007aff;
 width:0%;
+border-radius:10px;
 }
 
-.bottom-nav{
-position:fixed;
-bottom:0;
+/* INPUT */
+.input{
 width:100%;
-display:flex;
-justify-content:space-around;
-background:#111;
-padding:10px;
+padding:12px;
+border-radius:12px;
+border:none;
+background:#eee;
+margin-top:10px;
 }
 
-.nav-item{color:#aaa;}
-.active{color:white;}
+/* SECTION */
+.section{
+background:white;
+border-radius:20px;
+padding:15px;
+margin-top:15px;
+box-shadow:0 5px 15px rgba(0,0,0,0.05);
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">🔥 ISKY OS</div>
+<div class="header">🔥 ISKY</div>
 
-<div class="wrapper" id="wrap">
+<div class="grid">
+
+<div class="card" onclick="openPage('day')">
+<div class="title">🔥 Giorno</div>
+<div class="sub">Checklist & progress</div>
+</div>
+
+<div class="card" onclick="openPage('food')">
+<div class="title">🍽️ Dieta</div>
+<div class="sub">Macro & pasti</div>
+</div>
+
+<div class="card" onclick="openPage('workout')">
+<div class="title">💪 Allenamento</div>
+<div class="sub">Scheda completa</div>
+</div>
+
+<div class="card" onclick="openPage('mind')">
+<div class="title">🧠 Mentalità</div>
+<div class="sub">Focus & disciplina</div>
+</div>
+
+</div>
 
 <!-- GIORNO -->
-<div class="page">
-<div class="card">
-<h2>🔥 Oggi</h2>
-<div id="checklist"></div>
+<div id="day" class="page">
+<div class="back" onclick="closePage()">← Indietro</div>
+
+<h2>Checklist</h2>
+<div id="tasks"></div>
+
 <div class="progress"><div id="bar" class="bar"></div></div>
+
+<div class="section">
+<h3>Note</h3>
+<input id="note" class="input" placeholder="Scrivi qui...">
 </div>
+
 </div>
 
 <!-- DIETA -->
-<div class="page">
-<div class="card">
-<h2>🍽️ Dieta</h2>
+<div id="food" class="page">
+<div class="back" onclick="closePage()">← Indietro</div>
+
+<div class="section">
+<h3>Macro giornalieri</h3>
 <p>🔥 2510 kcal</p>
-<p>🥩 Proteine: 120g</p>
-<p>🍝 Carbo: 350g</p>
-<p>🥑 Grassi: 70g</p>
-<button onclick="meal()">Genera pasto</button>
+<p>🥩 120g proteine</p>
+<p>🍝 350g carbo</p>
+<p>🥑 70g grassi</p>
+</div>
+
+<div class="section">
+<h3>Meal generator</h3>
+<div class="btn" onclick="meal()">Genera pasto</div>
 <p id="meal"></p>
 </div>
+
 </div>
 
-<!-- ALLENAMENTO -->
-<div class="page">
-<div class="card">
-<h2>💪 Allenamento Completo</h2>
+<!-- WORKOUT -->
+<div id="workout" class="page">
+<div class="back" onclick="closePage()">← Indietro</div>
 
+<div class="section">
 <h3>🅰️ Seduta A</h3>
-<p>Plank gomiti → 5-7 min</p>
-<p>Leg press 45° → 4x6</p>
-<p>Military press manubri → 4x6</p>
-<p>Affondi su step → 3x10</p>
-<p>Leg extension → 3x10</p>
-<p>Alzate laterali → 3x10</p>
+<p>Leg press 4x6</p>
+<p>Military press 4x6</p>
+<p>Affondi 3x10</p>
+</div>
 
-<hr>
-
+<div class="section">
 <h3>🅱️ Seduta B</h3>
-<p>Side plank → 3-5 min</p>
-<p>Panca piana → 4x6</p>
-<p>Stacchi gambe semitese → 4x6</p>
-<p>Spinte manubri → 3x10</p>
-<p>Pendley row → 3x10</p>
-<p>Hyperextension → 3x10</p>
+<p>Panca 4x6</p>
+<p>Stacchi 4x6</p>
+<p>Pendley row 3x10</p>
+</div>
 
-<hr>
-
+<div class="section">
 <h3>🅲 Seduta C</h3>
-<p>Hollow hold → 5-7 min</p>
-<p>Squat → 4x6</p>
-<p>Trazioni presa inversa → 4x6</p>
-<p>Leg press → 3x10</p>
-<p>Leg curl → 3x10</p>
-<p>Pulley tricipiti → 3x10</p>
-
-</div>
-</div>
-
-<!-- ROUTINE -->
-<div class="page">
-<div class="card">
-<h2>⏰ Routine</h2>
-<p>6-14 → lavoro → allenamento</p>
-<p>14-22 → allenamento → business</p>
-<p>Notte → recupero</p>
-</div>
-</div>
-
-<!-- MENTAL -->
-<div class="page">
-<div class="card">
-<h2>🧠 Mentalità</h2>
-<p id="coach">Premi sotto</p>
-<button onclick="coach()">Motivami</button>
-</div>
+<p>Squat 4x6</p>
+<p>Trazioni 4x6</p>
+<p>Leg curl 3x10</p>
 </div>
 
 </div>
 
-<div class="bottom-nav">
-<div onclick="go(0)">🔥</div>
-<div onclick="go(1)">🍽️</div>
-<div onclick="go(2)">💪</div>
-<div onclick="go(3)">⏰</div>
-<div onclick="go(4)">🧠</div>
+<!-- MIND -->
+<div id="mind" class="page">
+<div class="back" onclick="closePage()">← Indietro</div>
+
+<div class="section">
+<h3>Motivazione</h3>
+<div class="btn" onclick="coach()">Motivami</div>
+<p id="coach"></p>
+</div>
+
 </div>
 
 <script>
 
-let page=0;
-function go(i){
-page=i;
-document.getElementById("wrap").style.transform=`translateX(-${i*100}vw)`;
+/* NAV */
+function openPage(id){
+document.getElementById(id).classList.add("active");
+}
+function closePage(){
+document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
 }
 
-// CHECKLIST
+/* DATA */
 const today=new Date().toDateString();
 let db=JSON.parse(localStorage.getItem("db"))||{};
-if(!db[today]) db[today]=[];
+if(!db[today]) db[today]={tasks:[],note:""};
 
+/* TASKS */
 const tasks=[
-"Allenamento","Mangiare pulito","Bere 3L","Business",
-"Scrivere idee","Preghiere","Corano","No alcol","No gioco"
+"Allenamento",
+"Mangiare pulito",
+"Bere 3L",
+"Business",
+"Preghiere",
+"Corano"
 ];
 
 function render(){
 let html="";
 tasks.forEach((t,i)=>{
-html+=`<div>
-<input type="checkbox" ${db[today][i]?"checked":""}
+html+=`<div class="task">
+<input type="checkbox" ${db[today].tasks[i]?"checked":""}
 onchange="save(${i},this.checked)"> ${t}
 </div>`;
 });
-document.getElementById("checklist").innerHTML=html;
+document.getElementById("tasks").innerHTML=html;
 update();
+document.getElementById("note").value=db[today].note||"";
 }
 
 function save(i,v){
-db[today][i]=v;
-localStorage.setItem("db",JSON.stringify(db));
+db[today].tasks[i]=v;
+saveDB();
 update();
 }
 
 function update(){
-let done=db[today].filter(x=>x).length;
+let done=db[today].tasks.filter(x=>x).length;
 document.getElementById("bar").style.width=(done/tasks.length*100)+"%";
+}
+
+/* NOTE */
+document.addEventListener("input",()=>{
+db[today].note=document.getElementById("note").value;
+saveDB();
+});
+
+/* SAVE */
+function saveDB(){
+localStorage.setItem("db",JSON.stringify(db));
 }
 
 render();
 
-// DIETA
-const carbs=["riso","pasta","quinoa","patate","avena"];
-const proteins=["pollo","manzo","tonno","uova","salmone"];
+/* MEAL */
+function meal(){
+const carbs=["riso","pasta","quinoa","patate"];
+const proteins=["pollo","manzo","uova","tonno"];
 const fats=["olio evo","mandorle","avocado"];
 
-function meal(){
 let c=carbs[Math.random()*carbs.length|0];
 let p=proteins[Math.random()*proteins.length|0];
 let f=Math.random()>0.5?fats[Math.random()*fats.length|0]:"";
-document.getElementById("meal").innerText=c+" + "+p+" "+f;
+
+document.getElementById("meal").innerText=
+c+" + "+p+" "+f;
 }
 
-// COACH
-const phrases=[
-"Disciplina batte tutto",
-"Fallo anche senza voglia",
-"Diventa pericoloso",
-"Costanza = risultati"
-];
-
+/* COACH */
 function coach(){
+const m=[
+"Disciplina batte tutto",
+"Fallo anche stanco",
+"Diventa pericoloso",
+"Non mollare"
+];
 document.getElementById("coach").innerText=
-phrases[Math.random()*phrases.length|0];
-}
-
-// SERVICE WORKER
-if("serviceWorker" in navigator){
-navigator.serviceWorker.register("service-worker.js");
+m[Math.random()*m.length|0];
 }
 
 </script>
