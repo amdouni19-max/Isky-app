@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISKY PRO</title>
+
+<link rel="stylesheet" href="style.css">
+<link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+
+<!-- SPLASH -->
+<div id="splash">
+<h1>ISKY</h1>
+<div class="loader"><div id="loaderBar"></div></div>
+</div>
+
+<div id="app">
+
+<header>
+<h1>ISKY</h1>
+<p id="dateText"></p>
+</header>
+
+<!-- HOME -->
+<section id="home" class="page active">
+
+<div class="card center">
+<canvas id="mainChart" width="160" height="160"></canvas>
+<p id="progressText"></p>
+</div>
+
+<div class="card">
+<h3>📊 Stato</h3>
+<p id="statusText"></p>
+</div>
+
+<div class="card">
+<h3>🧠 Coach</h3>
+<p id="coachText"></p>
+</div>
+
+<div class="card">
+<h3>🎯 Focus</h3>
+<p>Allenamento • Studio • Disciplina</p>
+</div>
+
+</section>
+
+<!-- DAY -->
+<section id="day" class="page">
+
+<div class="card">
+<h3>Checklist</h3>
+<div id="taskList"></div>
+</div>
+
+<div class="card">
+<h3>💧 Acqua</h3>
+<p id="waterText"></p>
+<button onclick="addWater()">+1</button>
+</div>
+
+<div id="workoutBox" class="card"></div>
+
+</section>
+
+<!-- NAV -->
+<nav>
+<div onclick="go('home',this)" class="active">🏠</div>
+<div onclick="go('day',this)">🔥</div>
+</nav>
+
+</div>
+
+<script src="data.js"></script>
+<script src="ui.js"></script>
+<script src="charts.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>
