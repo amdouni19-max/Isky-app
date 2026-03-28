@@ -1,0 +1,8 @@
+{
+  "name": "ISKY OS",
+  "short_name": "ISKY",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000"
+}
