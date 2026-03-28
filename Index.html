@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISKY OS</title>
+
+<link rel="manifest" href="manifest.json">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+
+body{
+font-family:-apple-system;
+background:linear-gradient(180deg,#0a0a0a,#000);
+color:white;
+}
+
+.header{
+text-align:center;
+padding:20px;
+font-size:28px;
+font-weight:600;
+}
+
+.wrapper{
+display:flex;
+width:500%;
+height:100vh;
+transition:0.4s;
+}
+
+.page{
+width:100vw;
+padding:15px;
+overflow-y:auto;
+}
+
+.card{
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+border-radius:20px;
+padding:18px;
+margin-bottom:15px;
+}
+
+h2{margin-bottom:10px;}
+h3{margin-top:10px;color:#00c6ff;}
+
+button{
+background:linear-gradient(135deg,#007aff,#00c6ff);
+border:none;
+padding:12px;
+border-radius:14px;
+color:white;
+width:100%;
+margin-top:10px;
+}
+
+.progress{
+height:8px;
+background:#222;
+border-radius:10px;
+margin-top:10px;
+}
+
+.bar{
+height:100%;
+background:linear-gradient(90deg,#00ff88,#00c6ff);
+width:0%;
+}
+
+.bottom-nav{
+position:fixed;
+bottom:0;
+width:100%;
+display:flex;
+justify-content:space-around;
+background:#111;
+padding:10px;
+}
+
+.nav-item{color:#aaa;}
+.active{color:white;}
+</style>
+</head>
+
+<body>
+
+<div class="header">🔥 ISKY OS</div>
+
+<div class="wrapper" id="wrap">
+
+<!-- GIORNO -->
+<div class="page">
+<div class="card">
+<h2>🔥 Oggi</h2>
+<div id="checklist"></div>
+<div class="progress"><div id="bar" class="bar"></div></div>
+</div>
+</div>
+
+<!-- DIETA -->
+<div class="page">
+<div class="card">
+<h2>🍽️ Dieta</h2>
+<p>🔥 2510 kcal</p>
+<p>🥩 Proteine: 120g</p>
+<p>🍝 Carbo: 350g</p>
+<p>🥑 Grassi: 70g</p>
+<button onclick="meal()">Genera pasto</button>
+<p id="meal"></p>
+</div>
+</div>
+
+<!-- ALLENAMENTO -->
+<div class="page">
+<div class="card">
+<h2>💪 Allenamento Completo</h2>
+
+<h3>🅰️ Seduta A</h3>
+<p>Plank gomiti → 5-7 min</p>
+<p>Leg press 45° → 4x6</p>
+<p>Military press manubri → 4x6</p>
+<p>Affondi su step → 3x10</p>
+<p>Leg extension → 3x10</p>
+<p>Alzate laterali → 3x10</p>
+
+<hr>
+
+<h3>🅱️ Seduta B</h3>
+<p>Side plank → 3-5 min</p>
+<p>Panca piana → 4x6</p>
+<p>Stacchi gambe semitese → 4x6</p>
+<p>Spinte manubri → 3x10</p>
+<p>Pendley row → 3x10</p>
+<p>Hyperextension → 3x10</p>
+
+<hr>
+
+<h3>🅲 Seduta C</h3>
+<p>Hollow hold → 5-7 min</p>
+<p>Squat → 4x6</p>
+<p>Trazioni presa inversa → 4x6</p>
+<p>Leg press → 3x10</p>
+<p>Leg curl → 3x10</p>
+<p>Pulley tricipiti → 3x10</p>
+
+</div>
+</div>
+
+<!-- ROUTINE -->
+<div class="page">
+<div class="card">
+<h2>⏰ Routine</h2>
+<p>6-14 → lavoro → allenamento</p>
+<p>14-22 → allenamento → business</p>
+<p>Notte → recupero</p>
+</div>
+</div>
+
+<!-- MENTAL -->
+<div class="page">
+<div class="card">
+<h2>🧠 Mentalità</h2>
+<p id="coach">Premi sotto</p>
+<button onclick="coach()">Motivami</button>
+</div>
+</div>
+
+</div>
+
+<div class="bottom-nav">
+<div onclick="go(0)">🔥</div>
+<div onclick="go(1)">🍽️</div>
+<div onclick="go(2)">💪</div>
+<div onclick="go(3)">⏰</div>
+<div onclick="go(4)">🧠</div>
+</div>
+
+<script>
+
+let page=0;
+function go(i){
+page=i;
+document.getElementById("wrap").style.transform=`translateX(-${i*100}vw)`;
+}
+
+// CHECKLIST
+const today=new Date().toDateString();
+let db=JSON.parse(localStorage.getItem("db"))||{};
+if(!db[today]) db[today]=[];
+
+const tasks=[
+"Allenamento","Mangiare pulito","Bere 3L","Business",
+"Scrivere idee","Preghiere","Corano","No alcol","No gioco"
+];
+
+function render(){
+let html="";
+tasks.forEach((t,i)=>{
+html+=`<div>
+<input type="checkbox" ${db[today][i]?"checked":""}
+onchange="save(${i},this.checked)"> ${t}
+</div>`;
+});
+document.getElementById("checklist").innerHTML=html;
+update();
+}
+
+function save(i,v){
+db[today][i]=v;
+localStorage.setItem("db",JSON.stringify(db));
+update();
+}
+
+function update(){
+let done=db[today].filter(x=>x).length;
+document.getElementById("bar").style.width=(done/tasks.length*100)+"%";
+}
+
+render();
+
+// DIETA
+const carbs=["riso","pasta","quinoa","patate","avena"];
+const proteins=["pollo","manzo","tonno","uova","salmone"];
+const fats=["olio evo","mandorle","avocado"];
+
+function meal(){
+let c=carbs[Math.random()*carbs.length|0];
+let p=proteins[Math.random()*proteins.length|0];
+let f=Math.random()>0.5?fats[Math.random()*fats.length|0]:"";
+document.getElementById("meal").innerText=c+" + "+p+" "+f;
+}
+
+// COACH
+const phrases=[
+"Disciplina batte tutto",
+"Fallo anche senza voglia",
+"Diventa pericoloso",
+"Costanza = risultati"
+];
+
+function coach(){
+document.getElementById("coach").innerText=
+phrases[Math.random()*phrases.length|0];
+}
+
+// SERVICE WORKER
+if("serviceWorker" in navigator){
+navigator.serviceWorker.register("service-worker.js");
+}
+
+</script>
+
+</body>
+</html>
